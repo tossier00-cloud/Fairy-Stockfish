@@ -87,7 +87,8 @@ namespace {
   constexpr int BishopSafeCheck = 645;
   constexpr int KnightSafeCheck = 792;
 
-  constexpr int OtherSafeCheck  = 600;
+  constexpr int PawnSafeCheck   = 500;
+  constexpr int OtherSafeCheck  = 700;
 
 #define S(mg, eg) make_score(mg, eg)
 
@@ -551,7 +552,7 @@ namespace {
             {
                 pawnChecks = attacks_bb(Us, pt, ksq, pos.pieces()) & ~pos.pieces() & pos.board_bb();
                 if (pawnChecks & safe)
-                    kingDanger += OtherSafeCheck;
+                    kingDanger += PawnSafeCheck;
                 else
                     unsafeChecks |= pawnChecks;
             }
