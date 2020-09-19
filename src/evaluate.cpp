@@ -87,7 +87,9 @@ namespace {
   constexpr int BishopSafeCheck = 645;
   constexpr int KnightSafeCheck = 792;
 
-  constexpr int OtherSafeCheck  = 600;
+  constexpr int PawnSafeCheck   = 600;
+  constexpr int LeaperSafeCheck = 800;
+  constexpr int RiderSafeCheck  = 600;
 
 #define S(mg, eg) make_score(mg, eg)
 
@@ -551,7 +553,7 @@ namespace {
             {
                 pawnChecks = attacks_bb(Us, pt, ksq, pos.pieces()) & ~pos.pieces() & pos.board_bb();
                 if (pawnChecks & safe)
-                    kingDanger += OtherSafeCheck;
+                    kingDanger += PawnSafeCheck;
                 else
                     unsafeChecks |= pawnChecks;
             }
@@ -562,7 +564,8 @@ namespace {
         default:
             otherChecks = attacks_bb(Us, pt, ksq, pos.pieces()) & get_attacks(Them, pt) & pos.board_bb();
             if (otherChecks & safe)
-                kingDanger += OtherSafeCheck * (more_than_one(otherChecks & safe) ? 3 : 2) / 2;
+                kingDanger +=  (LeaperAttacks[Us][pt][ksq] & otherChecks & safe ? LeaperSafeCheck : RiderSafeCheck)
+                             * (more_than_one(otherChecks & safe) ? 3 : 2) / 2;
             else
                 unsafeChecks |= otherChecks;
         }
@@ -574,7 +577,7 @@ namespace {
         for (PieceType pt : pos.piece_types())
             if (!pos.count_in_hand(Them, pt) && (attacks_bb(Us, pt, ksq, pos.pieces()) & safe & pos.drop_region(Them, pt) & ~pos.pieces()))
             {
-                kingDanger += OtherSafeCheck * 500 / (500 + PieceValue[MG][pt]);
+                kingDanger += RiderSafeCheck * 500 / (500 + PieceValue[MG][pt]);
                 // Presumably a mate threat
                 if (!(attackedBy[Us][KING] & ~(attackedBy[Them][ALL_PIECES] | pos.pieces(Us))))
                     kingDanger += 2000;
