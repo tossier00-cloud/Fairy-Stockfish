@@ -1016,7 +1016,7 @@ namespace {
 
     // Step 11. If the position is not in TT, decrease depth by 2
     if (   PvNode
-        && depth >= 6
+        && depth >= 6 - 2 * pos.captures_to_hand()
         && !ttMove)
         depth -= 2;
 
