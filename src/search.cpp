@@ -1018,7 +1018,7 @@ namespace {
     if (   PvNode
         && depth >= 6
         && !ttMove)
-        depth -= 2;
+        depth -= 2 - pos.captures_to_hand();
 
 moves_loop: // When in check, search starts from here
 
