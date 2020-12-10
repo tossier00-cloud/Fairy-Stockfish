@@ -1318,7 +1318,7 @@ namespace {
     int sf = me->scale_factor(pos, strongSide);
 
     // If scale factor is not already specific, scale down via general heuristics
-    if (sf == SCALE_FACTOR_NORMAL && !pos.captures_to_hand() && !pos.material_counting())
+    if (sf == SCALE_FACTOR_NORMAL && !pos.captures_to_hand() && !pos.material_counting() && pos.count<KING>() != 1)
     {
         if (pos.opposite_bishops())
         {
