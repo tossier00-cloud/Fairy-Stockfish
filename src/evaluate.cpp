@@ -971,6 +971,9 @@ namespace {
 
         Score bonus = PassedRank[r];
 
+        if (r == RANK_4 && pos.count<PAWN>(Us) == pos.count<ALL_PIECES>(Us))
+            bonus += bonus / 2;
+
         if (r > RANK_3)
         {
             int w = 5 * r - 13;
