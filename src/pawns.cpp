@@ -71,6 +71,11 @@ namespace {
   constexpr Score KingOnFile[2][2] = {{ S(-19,12), S(-6, 7)  },
                                      {  S(  0, 2), S( 6,-5) }};
 
+
+  int HordeConnected[2][RANK_NB] = { { 10, 20, 30, 50, 50, 80, 50 },
+                                     {  5, 10, 15, 25, 25, 40, 25 }};
+  TUNE(SetRange(-100, 400), HordeConnected);
+
   #undef S
   #undef V
 
@@ -154,8 +159,8 @@ namespace {
         {
             int v =  Connected[r] * (2 + bool(phalanx) - bool(opposed)) * (r == RANK_2 && pos.captures_to_hand() ? 3 : 1)
                    + 22 * popcount(support);
-            if (r >= RANK_4 && pos.count<PAWN>(Us) > popcount(pos.board_bb()) / 4)
-                v = popcount(support | phalanx) * 50 / (opposed ? 2 : 1);
+            if (pos.count<PAWN>(Us) > popcount(pos.board_bb()) / 4)
+                v = popcount(support | phalanx) * HordeConnected[bool(opposed)][r];
 
             score += make_score(v, v * (r - 2) / 4);
         }
